@@ -9,10 +9,15 @@
 package swagger
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"net/http/httputil"
+
+	//swagger "github.com/ehadjikyriacou/go-server-OpenAPI/go"
+	"go.mongodb.org/mongo-driver/bson"
+	//cmd "github.com/ehadjikyriacou/go-server-OpenAPI/cmd"
 )
 
 func JobApplicationsIdPut(w http.ResponseWriter, r *http.Request) {
@@ -90,5 +95,31 @@ func UsersPost(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("REQUEST:\n%s\n", string(reqDump))
 
+	var user User
+	err = json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf("\n\n\n")
+	fmt.Printf("FullName:%s, Roles:%s, Email:%s\n", user.FullName, user.Roles, user.Email)
+
+	// HERE ITS REQUIRED TO CONVERT struct USER to Interface
+
+	data := []interface{}{
+		bson.D{{Key: "Email", Value: user.Email}, {Key: "Password", Value: "hokuto1h"}, {Key: "FullName", Value: user.Email}},
+		//		bson.D{{Key: "Email", Value: "a@e.cy"}, {Key: "Password", Value: "hokuto2h"}, {Key: "FullName", Value: "KENS B"}},
+		//		bson.D{{Key: "Email", Value: "b@e.cy"}, {Key: "Password", Value: "hokutoh3"}, {Key: "FullName", Value: "KENS C"}},
+	}
+
+	err = InsertDataSimple(data)
+	if err != nil {
+		panic(err)
+	}
+	err = ViewInsertedDataSimple()
+	if err != nil {
+		panic(err)
+	}
 	w.WriteHeader(http.StatusOK)
 }

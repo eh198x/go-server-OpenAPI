@@ -10,7 +10,7 @@ package swagger
 
 type User struct {
 
-	Id int32 `json:"id,omitempty"`
+	Id string `json:"id,omitempty"`
 
 	Email string `json:"email,omitempty"`
 

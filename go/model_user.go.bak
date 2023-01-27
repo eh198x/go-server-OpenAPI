@@ -8,13 +8,15 @@
  */
 package swagger
 
-type JobApplication struct {
+type User struct {
 
-	Id string `json:"id,omitempty"`
+	Id int32 `json:"id,omitempty"`
 
-	Status string `json:"status,omitempty"`
+	Email string `json:"email,omitempty"`
 
-	UserId string `json:"user_id,omitempty"`
+	Password string `json:"password,omitempty"`
 
-	JobId int32 `json:"job_id,omitempty"`
+	FullName string `json:"full_name,omitempty"`
+
+	Roles []string `json:"roles,omitempty"`
 }
