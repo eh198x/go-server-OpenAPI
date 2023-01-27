@@ -13,7 +13,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gorilla/mux"
+	mux "github.com/gorilla/mux"
 )
 
 type Route struct {

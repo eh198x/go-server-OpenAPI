@@ -19,7 +19,9 @@ import (
 	//
 	//    sw "github.com/myname/myrepo/go"
 	//
-	sw "./go"
+	//sw "./go"
+
+	sw "github.com/ehadjikyriacou/go-server-OpenAPI/go"
 )
 
 func main() {

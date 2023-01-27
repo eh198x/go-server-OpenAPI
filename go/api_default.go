@@ -9,7 +9,10 @@
 package swagger
 
 import (
+	"fmt"
+	"log"
 	"net/http"
+	"net/http/httputil"
 )
 
 func JobApplicationsIdPut(w http.ResponseWriter, r *http.Request) {
@@ -79,5 +82,13 @@ func UsersIdPut(w http.ResponseWriter, r *http.Request) {
 
 func UsersPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+
+	reqDump, err := httputil.DumpRequest(r, true)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("REQUEST:\n%s\n", string(reqDump))
+
 	w.WriteHeader(http.StatusOK)
 }

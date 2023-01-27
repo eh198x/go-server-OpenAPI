@@ -552,7 +552,7 @@ components:
         user_id:
           type: string
         job_id:
-          type: string
+          type: integer
       example:
         user_id: 6
         job_id: 1
