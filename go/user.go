@@ -6,6 +6,7 @@ import (
 
 	//swagger "github.com/ehadjikyriacou/go-server-OpenAPI/g"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -13,6 +14,50 @@ import (
 const MONGODB_URI = "mongodb://mongoadmin:enigma@localhost:27017"
 const DBNAME = "oai"
 const COLLECTIONAME = "users"
+
+func UpdateUserDataSimple(userId string, data User) error {
+	var err error
+
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(MONGODB_URI))
+	if err != nil {
+		panic(err)
+	}
+
+	err = updateUserData(client, DBNAME, COLLECTIONAME, userId, data)
+	if err != nil {
+		panic(err)
+	}
+	return nil
+}
+
+func updateUserData(client *mongo.Client, dbName string, collectionName string, userId string, data User) error {
+	//ctx := context.TODO()
+
+	// Get a handle to the target collection
+	coll := client.Database(dbName).Collection(collectionName)
+
+	id, _ := primitive.ObjectIDFromHex(userId)
+
+	filter := bson.M{
+		"FullName": bson.M{"$regex": ".*Kenshiro.*"},
+		"_id":      id,
+	}
+
+	update := bson.D{
+		{Key: "$set", Value: bson.D{{Key: "FullName", Value: data.FullName}}},
+		{Key: "$set", Value: bson.D{{Key: "Email", Value: data.Email}}},
+		{Key: "$set", Value: bson.D{{Key: "Password", Value: data.Password}}},
+		{Key: "$set", Value: bson.D{{Key: "Roles", Value: data.Roles}}},
+	}
+
+	_, err := coll.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Data was updated successfully! ")
+	return nil
+}
 
 func InsertDataSimple(data []interface{}) error {
 
@@ -58,6 +103,7 @@ func ViewInsertedDataSimple() error {
 	}
 	return nil
 }
+
 func viewInsertedData(client *mongo.Client, dbName string, collectionName string) error {
 	ctx := context.TODO()
 
